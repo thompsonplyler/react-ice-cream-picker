@@ -1,23 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import {
+  Card,
+  Button,
+  Badge,
+  useMantineTheme,
+  Text,
+  Title,
+} from "@mantine/core";
+import "./App.css";
+import IceCream from "./IceCream";
 
 function App() {
+  let [iceCreams, setIceCreams] = useState([]);
+  const theme = useMantineTheme();
+
+  const secondaryColor =
+    theme.colorScheme === "dark" ? theme.colors.dark[1] : theme.colors.gray[7];
+
+  async function getIceCream() {
+    let response = await fetch(
+      "https://polar-everglades-83135.herokuapp.com/ice_cream/"
+    );
+    response = await response.json();
+    setIceCreams(response);
+  }
+
+  async function clickHandler(e, entry) {}
+
+  useEffect(() => {
+    getIceCream();
+  }, []);
+
+  let iceCreamCards = iceCreams.map((entry) => {
+    return <IceCream propsEntry={entry} key={entry.id} />;
+  });
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header>
+        <h1>Ice Cream</h1>
       </header>
+      {iceCreamCards}
     </div>
   );
 }
