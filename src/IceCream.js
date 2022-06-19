@@ -24,7 +24,6 @@ export default function IceCream({ propsEntry }) {
     );
 
     response = await response.json();
-    console.log("Response from PUT: ", response);
     setEntry(response);
   };
 
