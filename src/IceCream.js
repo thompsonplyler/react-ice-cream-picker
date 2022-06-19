@@ -1,19 +1,15 @@
 import { useState, React } from "react";
-import {
-  Card,
-  Button,
-  Badge,
-  useMantineTheme,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Card, Button, Badge, Title } from "@mantine/core";
 
 export default function IceCream({ propsEntry }) {
   const [entry, setEntry] = useState(propsEntry);
 
   const clickHandler = async (clickEntry) => {
+    let { id, favorites } = clickEntry;
+    favorites++;
+
     let response = await fetch(
-      `https://polar-everglades-83135.herokuapp.com/ice_cream/${clickEntry.id}`,
+      `https://nameless-depths-67068.herokuapp.com/ice_cream/${id}`,
       {
         method: "put",
         headers: {
@@ -22,10 +18,11 @@ export default function IceCream({ propsEntry }) {
         },
         body: JSON.stringify({
           ...clickEntry,
-          favorites: clickEntry.favorites++,
+          favorites,
         }),
       }
     );
+
     response = await response.json();
     console.log("Response from PUT: ", response);
     setEntry(response);
@@ -34,9 +31,9 @@ export default function IceCream({ propsEntry }) {
   return (
     <div>
       <Card shadow="sm">
-        <Title>{propsEntry.flavor.charAt(0).toUpperCase()}</Title>
-        <Badge>❤️ Likes: {propsEntry.favorites}</Badge>
-        <Button key={propsEntry.id} onClick={() => clickHandler(propsEntry)}>
+        <Title>{entry.flavor}</Title>
+        <Badge>❤️ Likes: {entry.favorites}</Badge>
+        <Button key={entry.id} onClick={() => clickHandler(entry)}>
           ❤️ Add Like
         </Button>
       </Card>
